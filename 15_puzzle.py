@@ -42,9 +42,11 @@ def down(p, x):
 def next_state(p_now):
     # Find the Blank Tile (Search for '0')
     i = p_now.status.index(0)
+    # Search for the row and column where the blank tile locate
     row = int(i/4)
     col = i % 4
     p_next = []
+    # Provide restrictions to the moving direction of the blank tile
     if col != 0:
         origin = copy.deepcopy(p_now.status)
         p_next.append(Node(up(origin, i), p_now))
@@ -60,6 +62,7 @@ def next_state(p_now):
     return p_next
 
 def Path_Trace(now):
+    # Trace the path
     path = []
     while now.parent is not None:
         path.append(now)
@@ -70,37 +73,36 @@ def Path_Trace(now):
 def main():
     test_case = test_case_5
     goal = [1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,0]
-    # Turn the array from 2d to 1d 
+    # Turn the 2d array to 1d list 
     test_case = test_case.flatten()
     test_case = test_case.tolist()
+    # Store the test_case in column-wise order
     puzzle = []
     for i in range(int(len(test_case)/4)):
         for j in range(i,len(test_case),4):
             puzzle.append(test_case[j])
+            
     # Apply BFS algorithm
-    start = Node(puzzle, None)
-    # visited = [start]
-    # queue = [start]
-    
+    start = Node(puzzle, None)  
     # Use Set data structure and collections.deque to improve time complexity 
     visited, queue = set([start]), collections.deque([start])
     
     while queue:
-        # now = queue.pop(0)
+        # popleft() is more efficient than pop(0)
         now = queue.popleft()
+        # When the goal is reached, break the loop
         if(now.status == goal):
             path = Path_Trace(now)
             break
         next_Path = next_state(now)
         for neighbor in next_Path:
             if neighbor not in visited:
-                # visited.append(neighbor)
                 visited.add(neighbor)
                 queue.append(neighbor)
     
-
     path.insert(0, start)
     
+    # Generate nodePath.txt 
     f = open("nodePath.txt", "w+")
     for i in range(len(path)):
         f.write("Step %d : " %(i+1))
@@ -112,6 +114,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # start_time = time.time()
     main()
-    # print(time.time()-start_time)
