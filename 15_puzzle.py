@@ -110,7 +110,6 @@ def main():
     # Generate nodePath.txt 
     f = open("nodePath.txt", "w+")
     for i in range(len(path)):
-        f.write("Step %d : " %(i+1))
         for j in path[i].status:
             f.write('%d ' %j)
         f.write('\n')
