@@ -1,13 +1,6 @@
-import numpy as np
 import copy
-import time
 import collections
 
-test_case_1 = np.array([[1, 2, 3, 4],[ 5, 6,0, 8], [9, 10, 7, 12] , [13, 14, 11, 15]])
-test_case_2 = np.array([[1, 0, 3, 4],[ 5, 2, 7, 8], [9, 6, 10, 11] , [13, 14, 15, 12]])
-test_case_3 = np.array([[0, 2, 3, 4],[ 1,5, 7, 8], [9, 6, 11, 12] , [13, 10, 14, 15]])
-test_case_4 = np.array([[5, 1, 2, 3],[0,6, 7, 4], [9, 10, 11, 8] , [13, 14, 15, 12]])
-test_case_5 = np.array([[1, 6, 2, 3], [9,5, 7, 4], [0, 10, 11, 8] , [13, 14, 15, 12]])
 
 class Node:
 
@@ -71,11 +64,23 @@ def Path_Trace(now):
     return path
 
 def main():
-    test_case = test_case_5
+    # Read test_case from test_case.txt
+    with open('test_case.txt') as f:
+        lines = f.readline()
+        lines.replace("[", "").replace("]", "").replace(","," ")
+    test_case = []
+    i = 0
+    while i < len(lines):
+        if lines[i].isdigit():
+            if lines[i+1].isdigit():
+                test_case.append(int(lines[i]+lines[i+1]))
+                i = i+2
+                continue
+            test_case.append(int(lines[i]))
+        i = i+1
+
     goal = [1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,0]
-    # Turn the 2d array to 1d list 
-    test_case = test_case.flatten()
-    test_case = test_case.tolist()
+
     # Store the test_case in column-wise order
     puzzle = []
     for i in range(int(len(test_case)/4)):
